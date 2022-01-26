@@ -47,16 +47,23 @@ void setup(void)
 int main(void)
 {
     uint32_t time = 0;
-    uint16_t ADCx = ADC_get(ADC2_CHANNEL_4);
+    uint16_t ADCx;
+    uint16_t napeti;
+    uint16_t teplota;
 
     setup();
 
     while (1) {
 
-        if (milis() - time > 333 && BTN_PUSH) {
+        if (milis() - time > 333 /*&& BTN_PUSH*/) {
             LED_REVERSE; 
             time = milis();
-            printf("%ld %d\r\n", time, ADCx);
+            ADCx = ADC_get(ADC2_CHANNEL_4);
+            napeti = (uint32_t)3300 * ADCx / 1024;
+            teplota = ((uint32_t)33000 * ADCx - 4096000)/ 19968;
+            printf("U = %dmV\r\nTeplota = %d.%d°C\r\n", napeti, teplota/10, teplota%10);
+
+            /*printf("%ld %d\r\n", time, ADCx);*/
         }
 
         /*LED_REVERSE;*/
